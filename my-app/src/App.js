@@ -4,9 +4,11 @@
     class App extends Component {
       render() {
         return (
+          <Router>
             <div className="App">
               Hello, World!
             </div>
+          </Router>
         );
       }
     }
