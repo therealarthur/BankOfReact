@@ -7,6 +7,7 @@ import LogIn from './components/Login';
 class App extends Component {
   constructor() {
     super();
+    
     this.state = {
       accountBalance: 14568.27,
       currentUser: {
