@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import AccountBalance from './AccountBalance';
+import CreditBalance from './CreditBalance';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 class Home extends Component {
     render() {
@@ -11,6 +13,7 @@ class Home extends Component {
 
                 <Link to="/userProfile">User Profile</Link>
                 <AccountBalance accountBalance={this.props.accountBalance} />
+                <CreditBalance creditBalance={this.props.creditBalance} />
             </div>
         );
     }
