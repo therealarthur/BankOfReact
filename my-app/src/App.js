@@ -4,7 +4,8 @@ import Home from './components/Home';
 import UserProfile from './components/UserProfile';
 import LogIn from './components/Login';
 import Credits from './components/Credits';
-
+import Debits from './components/Debits';
+import axios from 'axios';
 import { connect } from 'react-redux'
 import { getCreditsThunk } from './actions'
 import { useSelector } from 'react-redux';
@@ -35,11 +36,12 @@ class App extends Component {
   ///////////////////////////////////////////
   // REDUX STUFF
   componentDidMount() {
+    this.DebitRecord();
     //make sure data is available on load
-    this.props.getCreditsThunk().then(()=>{
-      this.setState({credits: this.props.credits['credits']})
-    }).then(()=> {
-      for(let x in this.state.credits){
+    this.props.getCreditsThunk().then(() => {
+      this.setState({ credits: this.props.credits['credits'] })
+    }).then(() => {
+      for (let x in this.state.credits) {
         let credit = this.state.credits[x]['amount']
         this.addCredit(credit)
       }
@@ -47,14 +49,59 @@ class App extends Component {
   }
   ///////////////////////////////////////////
   ///////////////////////////////////////////
+  DebitRecord = async () => {
+    let linkToAPI = 'https://moj-api.herokuapp.com/debits'
+    try {
+      let response = await axios.get(linkToAPI);
+      this.setState({
+        debits: response.data,
 
-  addCredit = (credit) =>{
+      });
+      let data = this.state.debits;
+      let debittotal = 0
+      data.map((debits) => {
+        debittotal = debittotal + debits.amount
+      })
+      //console.log(Number(this.state.accountBalance - debittotal))
+      //debittotal = Number(debittotal).toFixed(2)
+      //let amountafterDebit = Number(this.state.accountBalance - debittotal).toFixed(2)
+      this.setState({
+        debitBalance: debittotal,
+        accountBalance: this.state.accountBalance - debittotal,
+      })
+
+
+    }
+    catch (error) {
+      if (error.response) {
+        console.log(error.response.data); //Not Found
+        console.log(error.response.status); //404
+
+      }
+    }
+  }
+
+  addCredit = (credit) => {
     this.setState({
       accountBalance: this.state.accountBalance + credit,
       creditBalance: this.state.creditBalance + credit
     })
   }
-  
+
+  addDebit = (newDebit) => {
+    let fix = this.state.accountBalance - newDebit.amount
+    let deb = Number(newDebit.amount)
+    fix = Number(fix).toFixed(2)
+    this.setState({
+      accountBalance: fix,    //this.state.accountBalance - newDebit.amount,
+      debitBalance: this.state.debitBalance + deb
+    })
+    let debit = this.state.debits
+    debit.push(
+      newDebit
+    )
+  }
+
   render() {
     // console.log("App.js", this.state);
     console.log(this.state)
@@ -64,7 +111,8 @@ class App extends Component {
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     );
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
-    const CreditsComponent = () => (<Credits {...this.state}  />)
+    const CreditsComponent = () => (<Credits {...this.state} />)
+    const DebitsComponent = () => (<Debits accountBalance={this.state.accountBalance} debits={this.state.debits} addDebit={this.addDebit} />)
     return (
       <Router>
         <div>
@@ -72,6 +120,7 @@ class App extends Component {
           <Route exact path="/userProfile" render={UserProfileComponent} />
           <Route exact path="/Login" render={LogInComponent} />
           <Route exact path="/Credits" render={CreditsComponent} />
+          <Route exact path="/Debits" render={DebitsComponent} />
         </div>
       </Router>
 
@@ -79,17 +128,13 @@ class App extends Component {
   }
 }
 
-function addCredit(){
-// addcredit
-}
-
-function addDebit(){
-// adddebit
+function addCredit() {
+  // addcredit
 }
 
 function mapDispatch(dispatch) {
-  return { 
-    getCreditsThunk: () => dispatch(getCreditsThunk()) 
+  return {
+    getCreditsThunk: () => dispatch(getCreditsThunk())
   }
 }
 
