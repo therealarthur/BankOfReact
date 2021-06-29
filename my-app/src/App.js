@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './components/Home';
 import UserProfile from './components/UserProfile';
 import LogIn from './components/Login';
+import Credits from './components/Credits';
 
 import { connect } from 'react-redux'
 import { getCreditsThunk } from './actions'
@@ -29,6 +30,7 @@ class App extends Component {
     newUser.userName = logInInfo.userName
     this.setState({ currentUser: newUser })
   }
+
   ///////////////////////////////////////////
   ///////////////////////////////////////////
   // REDUX STUFF
@@ -47,25 +49,29 @@ class App extends Component {
   ///////////////////////////////////////////
 
   addCredit = (credit) =>{
-    this.setState({accountBalance: this.state.accountBalance + credit})
+    this.setState({
+      accountBalance: this.state.accountBalance + credit,
+      creditBalance: this.state.creditBalance + credit
+    })
   }
   
   render() {
     // console.log("App.js", this.state);
-
-    console.log("IN RENDER", this.state)
+    console.log(this.state)
 
     const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} creditBalance={this.state.creditBalance} />);
     const UserProfileComponent = () => (
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     );
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
+    const CreditsComponent = () => (<Credits {...this.state}  />)
     return (
       <Router>
         <div>
           <Route exact path="/" render={HomeComponent} />
           <Route exact path="/userProfile" render={UserProfileComponent} />
           <Route exact path="/Login" render={LogInComponent} />
+          <Route exact path="/Credits" render={CreditsComponent} />
         </div>
       </Router>
 
