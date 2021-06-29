@@ -3,14 +3,23 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './components/Home';
 import UserProfile from './components/UserProfile';
 import LogIn from './components/Login';
+import Credits from './components/Credits';
+
+import { connect } from 'react-redux'
+import { getCreditsThunk } from './actions'
+import { useSelector } from 'react-redux';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      accountBalance: 14568.27,
+      accountBalance: 0,
+      creditBalance: 0,
+      debitBalance: 0,
+      credits: [],
+      debits: [],
       currentUser: {
-        userName: 'joe_shmo',
+        userName: 'joe_mama',
         memberSince: '07/23/96',
       }
     }
@@ -22,19 +31,47 @@ class App extends Component {
     this.setState({ currentUser: newUser })
   }
 
-  render() {
+  ///////////////////////////////////////////
+  ///////////////////////////////////////////
+  // REDUX STUFF
+  componentDidMount() {
+    //make sure data is available on load
+    this.props.getCreditsThunk().then(()=>{
+      this.setState({credits: this.props.credits['credits']})
+    }).then(()=> {
+      for(let x in this.state.credits){
+        let credit = this.state.credits[x]['amount']
+        this.addCredit(credit)
+      }
+    })
+  }
+  ///////////////////////////////////////////
+  ///////////////////////////////////////////
 
-    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} />);
+  addCredit = (credit) =>{
+    this.setState({
+      accountBalance: this.state.accountBalance + credit,
+      creditBalance: this.state.creditBalance + credit
+    })
+  }
+  
+  render() {
+    // console.log("App.js", this.state);
+    console.log(this.state)
+
+    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} creditBalance={this.state.creditBalance} />);
     const UserProfileComponent = () => (
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     );
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
+    const CreditsComponent = () => (<Credits {...this.state}  />)
     return (
       <Router>
         <div>
           <Route exact path="/" render={HomeComponent} />
           <Route exact path="/userProfile" render={UserProfileComponent} />
           <Route exact path="/Login" render={LogInComponent} />
+          <Route exact path="/Credits" render={CreditsComponent} />
         </div>
       </Router>
 
@@ -42,4 +79,25 @@ class App extends Component {
   }
 }
 
-export default App;
+function addCredit(){
+// addcredit
+}
+
+function addDebit(){
+// adddebit
+}
+
+function mapDispatch(dispatch) {
+  return { 
+    getCreditsThunk: () => dispatch(getCreditsThunk()) 
+  }
+}
+
+function mapState(state) {
+  // console.log("HUH",state);
+  return {
+    credits: state.credits
+  }
+}
+
+export default connect(mapState, mapDispatch)(App);
