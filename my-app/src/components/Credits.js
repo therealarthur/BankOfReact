@@ -5,25 +5,23 @@ import { Redirect } from 'react-router-dom'
 
 class Credits extends Component {
     constructor(props) {
-        super(props)
-        
-        console.log("Logging this props CREDITS",this.props)
+        super(props);
+        this.state = {
+            credits: this.props.credits
+        }
+        let description = ''
+        let date = ''
+        let amount = 0
+        console.log("Logging this props CREDITS",this.state.credits)
     }
 
     handleChange = (e) => {
-        const updatedUser = { ...this.state.description}
-        const inputField = e.target.name
-        const inputValue = e.target.value
-        updatedUser[inputField] = inputValue
-
-        this.setState({ description: updatedUser })
-
+        console.log("handling change", e.target.value)
     }
 
     handleSubmit = (e) => {
         e.preventDefault()
-        this.props.mockLogIn(this.state.user)
-        this.setState({ redirect: true })
+        console.log("submitted.", this.description, this.date, this.amount)
     }
 
     render() {
@@ -51,6 +49,23 @@ class Credits extends Component {
                     <br></br>
                     <br></br>
                     <h2>Add Credit:</h2>
+                    <div>
+                        <form onSubmit={this.handleSubmit}>
+                            <div>
+                                <label htmlFor="Description">Description: </label>
+                                <input type="text" name="Description" onChange={this.handleChange} onSubmit={this.handleSubmit} value={this.description} />
+                            </div>
+                            <div>
+                                <label htmlFor="Date">Date: </label>
+                                <input type="Date" name="Date" value={this.date} />
+                            </div>
+                            <div>
+                                <label htmlFor="Price">Credit Amount: </label>
+                                <input type="Price" name="Price" value={this.amount} />
+                            </div>
+                            <button>Submit Credit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         )
