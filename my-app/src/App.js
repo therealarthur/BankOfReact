@@ -24,7 +24,8 @@ class App extends Component {
       currentUser: {
         userName: 'joe_mama',
         memberSince: '07/23/96',
-      }
+      },
+      updateState: (props)=>{this.state = props}
     }
   }
 
@@ -38,14 +39,18 @@ class App extends Component {
   ///////////////////////////////////////////
   // REDUX STUFF
   componentDidMount() {
-    this.DebitRecord();
+    this.DebitRecord()
     //make sure data is available on load
     this.props.getCreditsThunk().then(() => {
       this.setState({ credits: this.props.credits['credits'] })
     }).then(() => {
       for (let x in this.state.credits) {
         let credit = this.state.credits[x]['amount']
-        this.addCredit(credit)
+        let myCreditProp = {
+          amt: credit,
+          description: ''
+        }
+        this.addCredit(myCreditProp)
       }
     })
   }
@@ -64,9 +69,8 @@ class App extends Component {
       data.map((debits) => {
         debittotal = debittotal + debits.amount
       })
-      //console.log(Number(this.state.accountBalance - debittotal))
-      //debittotal = Number(debittotal).toFixed(2)
-      //let amountafterDebit = Number(this.state.accountBalance - debittotal).toFixed(2)
+      debittotal = Number(debittotal).toFixed(2)
+      let amountafterDebit = Number(this.state.accountBalance - debittotal).toFixed(2)
       this.setState({
         debitBalance: debittotal,
         accountBalance: this.state.accountBalance - debittotal,
@@ -83,20 +87,38 @@ class App extends Component {
     }
   }
 
-  addCredit = (credit) => {
-    this.setState({
-      accountBalance: this.state.accountBalance + credit,
-      creditBalance: this.state.creditBalance + credit
-    })
+  updateState = (props) => { // This is lazy solution to maintaining state
+    console.log("MYPROPS",props)
+    this.state = props;
+  }
+
+  addCredit = (props) =>{
+    if(props.description === ''){
+
+      this.setState({
+        accountBalance: this.state.accountBalance + props.amt,
+        creditBalance: this.state.creditBalance + props.amt
+      })
+    }else{
+      console.log("handlin it", props)
+      let myNewCredits = this.state.credits;
+      myNewCredits.push(props)
+      this.setState({
+        accountBalance: this.state.accountBalance + props.amt,
+        creditBalance: this.state.creditBalance + props.amt,
+        credits: myNewCredits
+      })
+      console.log("HANDLED IT", this.state)
+    }
   }
 
   addDebit = (newDebit) => {
-    let fix = this.state.accountBalance - newDebit.amount
+    let fix = this.state.accountBalance - Number(newDebit.amount)
     let deb = Number(newDebit.amount)
     fix = Number(fix).toFixed(2)
     this.setState({
       accountBalance: fix,    //this.state.accountBalance - newDebit.amount,
-      debitBalance: this.state.debitBalance + deb
+      debitBalance: Number(this.state.debitBalance + deb)
     })
     let debit = this.state.debits
     debit.push(
@@ -105,15 +127,14 @@ class App extends Component {
   }
 
   render() {
-    // console.log("App.js", this.state);
     console.log(this.state)
 
-    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} creditBalance={this.state.creditBalance} />);
+    const HomeComponent = () => (<Home { ...this.state} />);
     const UserProfileComponent = () => (
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     );
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
-    const CreditsComponent = () => (<Credits {...this.state} />)
+    const CreditsComponent = () => (<Credits accountBalance={this.state.accountBalance} credits={this.state.credits} creditBalance={this.state.creditBalance} updateState={this.updateState} />)
     const DebitsComponent = () => (<Debits accountBalance={this.state.accountBalance} debits={this.state.debits} addDebit={this.addDebit} />)
     return (
       <Router>
@@ -144,7 +165,6 @@ function mapDispatch(dispatch) {
 }
 
 function mapState(state) {
-  // console.log("HUH",state);
   return {
     credits: state.credits
   }

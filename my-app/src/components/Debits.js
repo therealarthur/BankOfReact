@@ -5,7 +5,7 @@ import '../css/Debits.css';
 
 class Debits extends Component {
     constructor(props) {
-        super(props); {
+        super(props); 
             this.state = {
                 theamount: '',
                 theDesc: '',
@@ -15,7 +15,6 @@ class Debits extends Component {
             this.handleChangeAmount = this.handleChangeAmount.bind(this);
             this.handleChangeDescription = this.handleChangeDescription.bind(this);
             this.handleSubmit = this.handleSubmit.bind(this);
-        }
     }
 
 
