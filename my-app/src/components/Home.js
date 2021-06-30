@@ -5,6 +5,7 @@ import Credits from './Credits';
 import Debits from './Debits'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import '../css/Home.css';
 
 class Home extends Component {
     constructor(props) {
@@ -18,7 +19,7 @@ class Home extends Component {
         // console.log("in Home props", this.props)
         return (
             <div>
-                <img src="https://4.bp.blogspot.com/-FK-P2mRfa-4/XD_90ZtpboI/AAAAAAAARmk/irYwY0lZXYQkfJehcZbWUy8UgQh6Q90-wCLcBGAs/s1600/Bank%2BBPD%2BBali.png" alt="bank" height="200px" />
+                <img className = "Image" src="https://4.bp.blogspot.com/-FK-P2mRfa-4/XD_90ZtpboI/AAAAAAAARmk/irYwY0lZXYQkfJehcZbWUy8UgQh6Q90-wCLcBGAs/s1600/Bank%2BBPD%2BBali.png" alt="bank" height="200px" />
                 <h1>Bank of React</h1>
 
                 <Link to="/userProfile">User Profile</Link>

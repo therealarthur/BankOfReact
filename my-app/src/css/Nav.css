@@ -1,0 +1,18 @@
+.nav_menu {
+    margin-top: 0px;
+    display:flex;
+    align-items: center;
+    min-height: 10vh;
+    background: rgb(73,79,82);
+    justify-content: space-around;
+    color: white;
+}
+.nav_menu li {
+    list-style: none;
+}
+
+.links {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}

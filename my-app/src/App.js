@@ -5,10 +5,12 @@ import UserProfile from './components/UserProfile';
 import LogIn from './components/Login';
 import Credits from './components/Credits';
 import Debits from './components/Debits';
+import Nav from './components/Nav';
 import axios from 'axios';
 import { connect } from 'react-redux'
 import { getCreditsThunk } from './actions'
 import { useSelector } from 'react-redux';
+
 
 class App extends Component {
   constructor() {
@@ -137,11 +139,14 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Route exact path="/" render={HomeComponent} />
-          <Route exact path="/userProfile" render={UserProfileComponent} />
-          <Route exact path="/Login" render={LogInComponent} />
-          <Route exact path="/Credits" render={CreditsComponent} />
-          <Route exact path="/Debits" render={DebitsComponent} />
+        <Nav />
+        <Switch>
+        <Route exact path="/" render={HomeComponent} />
+        <Route exact path="/userProfile" render={UserProfileComponent} />
+        <Route exact path="/Login" render={LogInComponent} /> 
+        <Route exact path="/Credits" render={CreditsComponent} />
+        <Route exact path="/Debits" render={DebitsComponent} />
+        </Switch>
         </div>
       </Router>
 
