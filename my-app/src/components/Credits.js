@@ -13,7 +13,8 @@ class Credits extends Component {
         this.state = {
             ...this.props,
             description: '',
-            date: ''
+            date: '',
+            amount: -1
         }
     }
 
@@ -25,6 +26,9 @@ class Credits extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
+        if(this.state.amount === -1){
+            return;
+        }
         // console.log("before submitted: ", this.state, this.state.amount)
         console.log("submitted: ", this.state.accountBalance,this.state.amount)
         this.state.credits.push({
