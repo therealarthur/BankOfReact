@@ -89,7 +89,9 @@ class App extends Component {
 
   updateState = (props) => { // This is lazy solution to maintaining state
     console.log("MYPROPS",props)
-    this.state = props;
+    this.state.accountBalance = props.accountBalance;
+    this.state.creditBalance = props.creditBalance;
+    this.state.credits = props.credits;
   }
 
   addCredit = (props) =>{
