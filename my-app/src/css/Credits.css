@@ -1,20 +1,30 @@
 .body{
     text-align: center;
 }
+#mainForm {
+    max-width: 300px;
+    margin: 30px auto;
+    overflow: auto;
+    min-height: 200px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 20px;
+}
 
-#debits_table {
+#credits_table {
     border-collapse: collapse;
     border: 3px solid black;
     margin: auto;
+}
+div {
+    text-align: center;
 }
 td, th{
     border: 3px solid black;
     padding: 12px;
 }
-.content {
-    margin-bottom: 20px;
-}
-.buttn {
+
+.btn {
     display: inline-block;
     background: #000;
     color: #fff;

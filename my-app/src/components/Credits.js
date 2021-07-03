@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { ReactReduxContext } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom';
+import '../css/Credits.css';
 
 
 class Credits extends Component {
@@ -51,27 +52,44 @@ class Credits extends Component {
         form.reset();
     }
 
+    TableHeader = () => {
+        let header = ["#", "AMOUNT", "DESCRIPTION", "DATE"];
+        return header.map((key, index) => {
+            return <th key={index}>{key}</th>
+        })
+    }
+
+
+    TableData = () => {
+        return this.props.credits.map((credits, index) => {
+            return (
+                <tr key={index}>
+                    <td>{index}</td>
+                    <td>{credits.amount}</td>
+                    <td>{credits.description}</td>
+                    <td>{credits.date}</td>
+                </tr>
+            )
+        })
+    }
+
     render() {
         return (
             <div>
                 <Link to="/">Go Back</Link>
                 <div style={{ display: "flex", padding: "20px"}}>
-                    <div style={{width: "50%", float: "left"}}>
+                    <div className = "credits_table">
                         <h1>Account Credits</h1>
                         <h2>Balance: ${Number(this.state.accountBalance).toFixed(2)}</h2>
                         <h3>Current Credits to Account:</h3>
-                        {this.props.credits.map( (credit, index) => {
-                            return (
-                                <li key={index}>
-                                <p>Credit {index+1}</p> 
-                                {credit.description}
-                                <br></br>
-                                {credit.date}
-                                <br></br>
-                                ${credit.amount}
-                                </li>
-                            )}) 
-                        }
+                        <table id='credits_table'>
+                        <thead>
+                            <tr>{this.TableHeader()}</tr>
+                        </thead>
+                        <tbody>
+                            {this.TableData()}
+                        </tbody>
+                        </table>
                     </div>
                     <div style={{width: "50%", float: "left", padding: "20px"}}>
                         <br></br>
@@ -82,17 +100,20 @@ class Credits extends Component {
                             <form id="mainForm" onSubmit={this.handleSubmit}>
                                 <div>
                                     <label htmlFor="Description">Description: </label>
+                                    <br />
                                     <input type="text" name="description" onChange={this.handleChange} onSubmit={this.handleSubmit} />
                                 </div>
                                 <div>
                                     <label htmlFor="Date">Date: </label>
+                                    <br />
                                     <input type="Date" name="date" onChange={this.handleChange} />
                                 </div>
                                 <div>
                                     <label htmlFor="Price">Credit Amount: </label>
+                                    <br/>
                                     <input type="number" name="amount" onChange={this.handleChange} />
                                 </div>
-                                <button>Submit Credit</button>
+                                <button className = "btn">Submit</button>
                             </form>
                         </div>
                     </div>

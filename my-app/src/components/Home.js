@@ -23,9 +23,9 @@ class Home extends Component {
                 <h1>Bank of React</h1>
 
                 <Link to="/userProfile">User Profile</Link>
-                <Link to="/Debits">Debit</Link>
+                {/* <Link to="/Debits">Debit</Link> */}
                 <AccountBalance accountBalance={Number(this.props.accountBalance).toFixed(2)} />
-                <Link to={{pathname: "/Credits"}}>Account Credits</Link>
+                {/* <Link to={{pathname: "/Credits"}}>Account Credits</Link> */}
                 {/* <CreditBalance creditBalance={this.props.creditBalance} /> */}
             </div>
         );

@@ -91,7 +91,7 @@ class Debits extends Component {
     render() {
 
         return (
-            <div>
+            <div className="content">
                 <div>
                     <h1>Debits</h1>
                 </div>
